@@ -1,0 +1,54 @@
+{
+  "name": "dsh-pwa",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "OIDC-safe PWA shell for DeepSeek Harness Web: a service worker, offline fallback and installable app around the built-in manifest.",
+  "license": "MIT",
+  "author": "Allenyou",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Allenyou1126/dsh-pwa.git"
+  },
+  "homepage": "https://github.com/Allenyou1126/dsh-pwa#readme",
+  "bugs": {
+    "url": "https://github.com/Allenyou1126/dsh-pwa/issues"
+  },
+  "keywords": [
+    "deepseek-harness",
+    "dsh",
+    "dsh-plugin",
+    "pwa",
+    "service-worker",
+    "offline"
+  ],
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "src",
+    "cordis.patch.yml",
+    "locale",
+    "icon.svg",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": "^22.19 || >=24",
+    "dsh": "^0.2.3-alpha.2"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "check": "node --check src/*.js && node --check test/*.js && node --test test/*.test.js"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  }
+}

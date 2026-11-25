@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "PWA 安装与离线外壳",
+    "description": "为 Web UI 增加 Service Worker 与离线外壳，让安装后的应用以独立窗口打开；OIDC 登录、API 与插件包始终走网络、不被缓存。"
+  }
+}

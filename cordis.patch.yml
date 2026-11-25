@@ -1,0 +1,15 @@
+# dsh-pwa bundle patch: mount the Host service worker row.
+#
+# DSH 0.2.3 already serves the Web App Manifest, the install icons and the
+# standalone display mode, so this bundle only adds the service worker and its
+# index registration. It never overrides /manifest.webmanifest or /icons/*.
+#
+# Row config (optional):
+#   offline: true|false     cache the app shell and static assets (default true)
+#   autoReload: true|false  reload once when an updated worker takes over
+#                           (default false, which never interrupts an OIDC
+#                           sign-in in flight)
+
+- insert:
+    - id: dsh-pwa
+      name: 'dsh-pwa'

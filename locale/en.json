@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "PWA shell (OIDC-safe)",
+    "description": "Adds a service worker and an offline shell to the Web UI, so the installed app opens without browser chrome. OIDC sign-in, the API and plugin bundles always stay on the network and are never cached."
+  }
+}
