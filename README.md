@@ -20,13 +20,19 @@
 
 ## 安装
 
-本地 checkout：
+直接从 GitHub 安装：
+
+```sh
+dsh plugin --profile <profile> add github:Allenyou1126/dsh-pwa
+```
+
+或用本地 checkout：
 
 ```sh
 dsh plugin --profile <profile> add /absolute/path/to/dsh-pwa
 ```
 
-或在 **Plugins → Add plugin** 选择本目录 / 填 GitHub 地址。安装后 `cordis.patch.yml` 会插入 `dsh-pwa` 行；插件没有必填配置，装上即生效。
+或在 **Plugins → Add plugin** 填 `github:Allenyou1126/dsh-pwa` / 选择本目录。安装后 `cordis.patch.yml` 会插入 `dsh-pwa` 行；插件没有必填配置，装上即生效。
 
 可选配置（覆盖该行 `config`）：
 
