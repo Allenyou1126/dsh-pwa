@@ -16,7 +16,7 @@
 | 离线兜底页 | 既没有网络也没有外壳时显示中文离线页 |
 | 自动更新 | Service Worker 脚本随插件版本与源码哈希变化；可选 `autoReload` 在更新接管后刷新一次 |
 
-它不碰的东西，正是最容易被缓存毁掉的：`/auth/*`、`/api/*`、`/plugins/*`、`/ws`、`/connect`、`/pairing/*`、`/oauth/*`、`/open-in-app/*`、`/hooks/*`、`/inspector/*`。
+它不碰的东西，正是最容易被缓存毁掉的：`/auth/*`、`/api/*`、`/plugins/*`、`/ws`、`/connect`、`/pairing/*`、`/oauth/*`、`/oauth2/*`、`/open-in-app/*`、`/hooks/*`、`/inspector/*`。
 
 ## 安装
 
@@ -77,6 +77,27 @@ dsh --profile web --public-url https://app.example.com/ui/ --trusted-host app.ex
 - **TLS 终止在代理上**：Service Worker 只在安全上下文生效（`localhost` 除外），`dsh-oidc` 也要求 HTTPS。
 - **不要缓存 `/auth/*` 与 `/sw.js`**，也不要在代理层给 manifest、图标、`sw.js` 加登录拦截——浏览器取 manifest 时不带 Cookie。
 - `/ui` 要重定向到 `/ui/`，否则页面相对路径与 SW scope 会落到错误目录。
+
+### 如果前面还挂着 oauth2-proxy
+
+`dsh-oidc` 的定位就是取代 oauth2-proxy。两者叠在一起时，oauth2-proxy 会先拦下**所有**请求，浏览器无 Cookie 抓 manifest、图标、`sw.js` 时全被 302 到 `/oauth2/sign_in`，DevTools 就会报“未检测到任何清单”，Service Worker 也无法注册。
+
+推荐做法是完成迁移：把 oauth2-proxy 从请求链路里摘掉，只留 nginx TLS + DSH + `dsh-oidc`（manifest/图标由 DSH 匿名提供，`/sw.js` 由本插件匿名提供）。
+
+迁移期确实要保留 oauth2-proxy 时，至少把 PWA 面放行（`auth_request off` 需该 location 能覆盖 server 级指令）：
+
+```nginx
+location = /manifest.webmanifest { auth_request off; proxy_pass http://127.0.0.1:3080; }
+location = /sw.js                 { auth_request off; proxy_pass http://127.0.0.1:3080; }
+location ~ ^/(?:icon-192|icon-512|icon-maskable-512|apple-touch-icon)\.png$ {
+    auth_request off; proxy_pass http://127.0.0.1:3080;
+}
+location ~ ^/favicon(?:-dark)?\.svg$ { auth_request off; proxy_pass http://127.0.0.1:3080; }
+```
+
+（`proxy_pass` 之外的 `proxy_set_header` 等按你的 server 块补齐。）
+
+注意这只能解决“manifest/SW 拿不到”；oauth2-proxy 与 `dsh-oidc` 双层登录仍会互相盖住对方的跳转，不建议长期保留。
 
 nginx 片段：
 

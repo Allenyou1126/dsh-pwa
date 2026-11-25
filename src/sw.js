@@ -39,6 +39,8 @@ const BYPASS = [
   'connect',
   'pairing/',
   'oauth/',
+  // A legacy oauth2-proxy in front of DSH owns these endpoints; never shadow them.
+  'oauth2/',
   'open-in-app/',
   'hooks/',
   'inspector/',

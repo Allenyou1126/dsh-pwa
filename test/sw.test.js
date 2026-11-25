@@ -109,6 +109,14 @@ test('bypasses every OIDC endpoint', () => {
   }
 })
 
+test('bypasses a legacy oauth2-proxy in front of DSH', () => {
+  const scope = load({ fetchImpl: async () => response() })
+  for (const path of ['/oauth2/sign_in', '/oauth2/callback', '/oauth2/auth', '/oauth2/start']) {
+    const event = dispatch(scope, 'fetch', request(`https://dsh.example.com${path}`))
+    assert.equal(event.responded, undefined, `${path} must reach the proxy`)
+  }
+})
+
 test('bypasses the API, plugin bundles and WebSocket upgrades', () => {
   const scope = load({ fetchImpl: async () => response() })
   const api = dispatch(scope, 'fetch', request('https://dsh.example.com/api/session'))
